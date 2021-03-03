@@ -23,6 +23,18 @@ void UPlayerScript::BeginPlay()
 
 	Setup_InputComponent();
 	
+	meshComponent = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
+
+	if (meshComponent != NULL)
+	{
+		animInstance = meshComponent->GetAnimInstance();
+
+		if (animInstance != NULL)
+		{
+			animProperty_Direction = FindFProperty<FFloatProperty>(animInstance->GetClass(), "Direction");
+			animProperty_Speed = FindFProperty<FFloatProperty>(animInstance->GetClass(), "Speed");
+		}
+	}
 }
 
 void UPlayerScript::Setup_InputComponent()
@@ -40,7 +52,21 @@ void UPlayerScript::Pressed_MoveForward(float axisValue)
 
 	FVector forwardDirection = FRotationMatrix(currentRotation).GetScaledAxis(EAxis::X);
 
+	if (axisValue < 0)
+	{
+		axisValue = axisValue/2;
+	}
+
 	playerCharacter->AddMovementInput(forwardDirection,axisValue);
+
+	if (axisValue < 0)
+	{
+		OnForward = false;
+	}
+	else
+	{
+		OnForward = true;
+	}
 }
 
 void UPlayerScript::Pressed_MoveRight(float axisValue)
@@ -74,6 +100,26 @@ void UPlayerScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	Updating_PlayerAnimationSpeed();
 }
 
+
+void UPlayerScript::Updating_PlayerAnimationSpeed()
+{
+	if (animProperty_Speed != NULL)
+	{
+		FVector groundVelocity = playerCharacter->GetCharacterMovement()->Velocity;
+		groundVelocity.Z = 0.0f;
+
+		float velocityLenght = groundVelocity.Size();
+
+		if(OnForward == false)
+		{
+			velocityLenght = -velocityLenght;
+		}
+
+		animProperty_Speed->SetPropertyValue_InContainer(animInstance, velocityLenght);
+		
+		animProperty_Direction->SetPropertyValue_InContainer(animInstance, velocityLenght);
+	}
+}

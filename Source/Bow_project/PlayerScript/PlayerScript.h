@@ -28,11 +28,20 @@ public:
 
 	ACharacter* playerCharacter;
 
+	USkeletalMeshComponent* meshComponent;
+	UAnimInstance* animInstance;
+
+	UFloatProperty* animProperty_Direction;
+	UFloatProperty* animProperty_Speed;
+
 	void Setup_InputComponent();
 	void Pressed_MoveForward(float axisValue);
 	void Pressed_MoveRight(float axisValue);
 	void Mouse_LookAround(float axisValue);
 	void Mouse_LookUpDown(float axisValue);
 
-		
+	void Updating_PlayerAnimationSpeed();
+
+	bool OnForward = true;
+	bool OnRight = false;
 };
