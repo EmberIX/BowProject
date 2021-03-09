@@ -9,7 +9,7 @@ UPlayerScript::UPlayerScript()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
+	Aim = StaticLoadClass(UObject::StaticClass(), nullptr, TEXT("/Game/UI/Aim.Aim_C"));
 	// ...
 }
 
@@ -25,6 +25,8 @@ void UPlayerScript::BeginPlay()
 	
 	meshComponent = GetOwner()->FindComponentByClass<USkeletalMeshComponent>();
 
+	Aiming = CreateWidget<UPlayer_Aim>(GetWorld(), Aim);
+
 	if (meshComponent != NULL)
 	{
 		animInstance = meshComponent->GetAnimInstance();
@@ -35,6 +37,17 @@ void UPlayerScript::BeginPlay()
 			animProperty_Speed = FindFProperty<FFloatProperty>(animInstance->GetClass(), "Speed");
 		}
 	}
+
+	TArray<UCameraComponent*> Player_Camera;
+	this->GetOwner()->GetComponents<UCameraComponent>(Player_Camera);
+
+	for (int32 index = 0; index < Player_Camera.Num(); index++)
+	{
+		if (Player_Camera[index]->GetFName().ToString() == "Camera")
+		{
+			camera = Player_Camera[index];
+		}
+	}
 }
 
 void UPlayerScript::Setup_InputComponent()
@@ -43,6 +56,9 @@ void UPlayerScript::Setup_InputComponent()
 	GetOwner()->InputComponent->BindAxis("MoveRight",this, &UPlayerScript::Pressed_MoveRight);
 	GetOwner()->InputComponent->BindAxis("LookAround",this, &UPlayerScript::Mouse_LookAround);
 	GetOwner()->InputComponent->BindAxis("LookUpDown",this, &UPlayerScript::Mouse_LookUpDown);
+	
+	GetOwner()->InputComponent->BindAction("Aim",IE_Pressed,this, &UPlayerScript::Aimming);
+	GetOwner()->InputComponent->BindAction("Aim",IE_Released,this, &UPlayerScript::ReleasedAimming);
 }
 
 void UPlayerScript::Pressed_MoveForward(float axisValue)
@@ -81,16 +97,12 @@ void UPlayerScript::Pressed_MoveRight(float axisValue)
 
 void UPlayerScript::Mouse_LookAround(float axisValue)
 {
-	//if (axisValue != 0)
-	//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, TEXT("LookAround"));
 
 	playerCharacter->AddControllerYawInput(axisValue);
 }
 
 void UPlayerScript::Mouse_LookUpDown(float axisValue)
 {
-	//if (axisValue != 0)
-	//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Cyan, TEXT("LookUpDown"));
 
 	playerCharacter->AddControllerPitchInput(axisValue);
 }
@@ -101,8 +113,26 @@ void UPlayerScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	Updating_PlayerAnimationSpeed();
+
 }
 
+void UPlayerScript::Aimming()
+{
+	if (Aiming != NULL)
+	{
+		Aiming->AddToViewport(10);
+		camera->FieldOfView = 50;
+	}
+}
+
+void UPlayerScript::ReleasedAimming()
+{
+	if (Aiming != NULL)
+	{
+		Aiming->RemoveFromParent();
+		camera->FieldOfView = 70;
+	}
+}
 
 void UPlayerScript::Updating_PlayerAnimationSpeed()
 {

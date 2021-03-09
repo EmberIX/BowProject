@@ -2,7 +2,8 @@
 
 #pragma once
 #include "Engine.h"
-
+#include "Camera/CameraComponent.h"
+#include "..//Player_Aim.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "PlayerScript.generated.h"
@@ -33,13 +34,21 @@ public:
 
 	UFloatProperty* animProperty_Direction;
 	UFloatProperty* animProperty_Speed;
+	
+	UPROPERTY()
+		TSubclassOf<class UUserWidget> Aim;
+	UPROPERTY()
+		UPlayer_Aim* Aiming;
+
+	UCameraComponent* camera;
 
 	void Setup_InputComponent();
 	void Pressed_MoveForward(float axisValue);
 	void Pressed_MoveRight(float axisValue);
 	void Mouse_LookAround(float axisValue);
 	void Mouse_LookUpDown(float axisValue);
-
+	void Aimming();
+	void ReleasedAimming();
 	void Updating_PlayerAnimationSpeed();
 
 	bool OnForward = true;
