@@ -9,6 +9,7 @@ UPlayerScript::UPlayerScript()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
+	Arrow_BP = StaticLoadClass(UObject::StaticClass(), nullptr, TEXT("/Game/BluePrint/Arrow_BP"));
 	Aim = StaticLoadClass(UObject::StaticClass(), nullptr, TEXT("/Game/UI/Aim.Aim_C"));
 	// ...
 }
@@ -58,6 +59,7 @@ void UPlayerScript::Setup_InputComponent()
 	GetOwner()->InputComponent->BindAxis("LookUpDown",this, &UPlayerScript::Mouse_LookUpDown);
 	
 	GetOwner()->InputComponent->BindAction("Aim",IE_Pressed,this, &UPlayerScript::Aimming);
+	GetOwner()->InputComponent->BindAction("Shoot",IE_Pressed,this, &UPlayerScript::Shoot);
 	GetOwner()->InputComponent->BindAction("Aim",IE_Released,this, &UPlayerScript::ReleasedAimming);
 }
 
@@ -116,12 +118,31 @@ void UPlayerScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 }
 
+void UPlayerScript::Shoot()
+{
+	printf("Shoot");
+	if (isAiming)
+	{
+		FVector Location;
+		FRotator Rotation;
+
+		//GetController()->GetPlayerViewPoint(Location, Rotation);
+
+		FActorSpawnParameters SpawnArrow;
+		//AActor* SpawnActorRef = GetWorld()->SpawnActor<AActor>(ArrowToSpawn, Location, Rotation,SpawnArrow);
+		Arrow = (AArrow*) GetWorld()->SpawnActor<AActor>(Arrow_BP, Location, Rotation, SpawnArrow);
+
+	}
+
+}
+
 void UPlayerScript::Aimming()
 {
 	if (Aiming != NULL)
 	{
 		Aiming->AddToViewport(10);
 		camera->FieldOfView = 50;
+		isAiming = true;
 	}
 }
 
@@ -131,6 +152,7 @@ void UPlayerScript::ReleasedAimming()
 	{
 		Aiming->RemoveFromParent();
 		camera->FieldOfView = 70;
+		isAiming = false;
 	}
 }
 

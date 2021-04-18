@@ -4,12 +4,13 @@
 #include "Engine.h"
 #include "Camera/CameraComponent.h"
 #include "..//Player_Aim.h"
+#include "..//Public/Arrow.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "PlayerScript.generated.h"
 
 
-UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+UCLASS( classgroup=(custom), meta=(blueprintspawnablecomponent) )
 class BOW_PROJECT_API UPlayerScript : public UActorComponent
 {
 	GENERATED_BODY()
@@ -32,9 +33,17 @@ public:
 	USkeletalMeshComponent* meshComponent;
 	UAnimInstance* animInstance;
 
-	UFloatProperty* animProperty_Direction;
-	UFloatProperty* animProperty_Speed;
+	FFloatProperty* animProperty_Direction;
+	FFloatProperty* animProperty_Speed;
 	
+	//UPROPERTY(EditDefaultsOnly, Catagory = "Spawning")
+	//	TSubclassOf<AActor> ArrowToSpawn;
+
+	UPROPERTY()
+		TSubclassOf<class AActor> Arrow_BP;
+	UPROPERTY()
+		AArrow* Arrow;
+
 	UPROPERTY()
 		TSubclassOf<class UUserWidget> Aim;
 	UPROPERTY()
@@ -49,8 +58,12 @@ public:
 	void Mouse_LookUpDown(float axisValue);
 	void Aimming();
 	void ReleasedAimming();
+	
+	void Shoot();
+
 	void Updating_PlayerAnimationSpeed();
 
 	bool OnForward = true;
 	bool OnRight = false;
+	bool isAiming = false;
 };
