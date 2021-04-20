@@ -34,8 +34,10 @@ void UPlayerScript::BeginPlay()
 
 		if (animInstance != NULL)
 		{
+			//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Blue, TEXT("AA"));
 			animProperty_Direction = FindFProperty<FFloatProperty>(animInstance->GetClass(), "Direction");
 			animProperty_Speed = FindFProperty<FFloatProperty>(animInstance->GetClass(), "Speed");
+			animProperty_isAiming = FindFProperty<FBoolProperty>(animInstance->GetClass(), "isAiming");
 		}
 	}
 
@@ -142,8 +144,16 @@ void UPlayerScript::Aimming()
 	{
 		Aiming->AddToViewport(10);
 		camera->FieldOfView = 50;
-		isAiming = true;
+		isAiming = true;	
+		if (animInstance != NULL)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Blue, TEXT("dd"));
+			animProperty_isAiming->SetPropertyValue_InContainer(animInstance, isAiming);
+		}
 	}
+
+
+
 }
 
 void UPlayerScript::ReleasedAimming()
@@ -152,7 +162,13 @@ void UPlayerScript::ReleasedAimming()
 	{
 		Aiming->RemoveFromParent();
 		camera->FieldOfView = 70;
+
+
 		isAiming = false;
+		if (animInstance != NULL)
+		{
+			animProperty_isAiming->SetPropertyValue_InContainer(animInstance, isAiming);
+		}
 	}
 }
 

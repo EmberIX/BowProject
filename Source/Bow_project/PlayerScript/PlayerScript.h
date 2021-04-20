@@ -36,6 +36,8 @@ public:
 	FFloatProperty* animProperty_Direction;
 	FFloatProperty* animProperty_Speed;
 	
+	FBoolProperty* animProperty_isAiming;
+	
 	//UPROPERTY(EditDefaultsOnly, Catagory = "Spawning")
 	//	TSubclassOf<AActor> ArrowToSpawn;
 
