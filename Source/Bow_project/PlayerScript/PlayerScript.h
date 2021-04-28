@@ -32,16 +32,19 @@ public:
 
 	USkeletalMeshComponent* meshComponent;
 	UAnimInstance* animInstance;
-
+	
 	FFloatProperty* animProperty_Direction;
 	FFloatProperty* animProperty_Speed;
 	
 	FBoolProperty* animProperty_isAiming;
 	
-	//UPROPERTY(EditDefaultsOnly, Catagory = "Spawning")
+	//UPROPERTY(EditDefaultsOnly)
 	//	TSubclassOf<AActor> ArrowToSpawn;
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
+		UAnimMontage* ShootArrow;
+
+	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<class AActor> Arrow_BP;
 	UPROPERTY()
 		AArrow* Arrow;

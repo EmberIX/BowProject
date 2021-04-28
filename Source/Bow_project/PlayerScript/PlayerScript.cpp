@@ -125,7 +125,13 @@ void UPlayerScript::Shoot()
 	printf("Shoot");
 	if (isAiming)
 	{
-		FVector Location;
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Blue, TEXT("Shoot"));
+
+		if (ShootArrow)
+		{
+			animInstance->Montage_Play(ShootArrow);
+		}
+		FVector Location = GetOwner()->GetActorLocation();
 		FRotator Rotation;
 
 		//GetController()->GetPlayerViewPoint(Location, Rotation);
