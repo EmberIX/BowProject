@@ -130,6 +130,9 @@ void UPlayerScript::Shoot()
 		if (ShootArrow)
 		{
 			animInstance->Montage_Play(ShootArrow);
+
+			playerScore += 1;
+
 		}
 		FVector Location = GetOwner()->GetActorLocation();
 		FRotator Rotation;

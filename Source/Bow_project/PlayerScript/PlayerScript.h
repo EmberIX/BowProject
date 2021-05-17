@@ -71,4 +71,6 @@ public:
 	bool OnForward = true;
 	bool OnRight = false;
 	bool isAiming = false;
+
+	int playerScore = 0;
 };
