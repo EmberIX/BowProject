@@ -123,17 +123,16 @@ void UPlayerScript::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 void UPlayerScript::Shoot()
 {
 	printf("Shoot");
-	if (isAiming)
+	if (isAiming && (isShooting == false))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Blue, TEXT("Shoot"));
+			GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Blue, TEXT("Shoot"));
+			isShooting = true;
 
-		if (ShootArrow)
-		{
-			animInstance->Montage_Play(ShootArrow);
+			if (ShootArrow != NULL)
+			{
+				animInstance->Montage_Play(ShootArrow);
 
-			playerScore += 1;
-
-		}
+			}
 		FVector Location = GetOwner()->GetActorLocation();
 		FRotator Rotation;
 
@@ -141,7 +140,7 @@ void UPlayerScript::Shoot()
 
 		FActorSpawnParameters SpawnArrow;
 		//AActor* SpawnActorRef = GetWorld()->SpawnActor<AActor>(ArrowToSpawn, Location, Rotation,SpawnArrow);
-		Arrow = (AArrow*) GetWorld()->SpawnActor<AActor>(Arrow_BP, Location, Rotation, SpawnArrow);
+		Arrow = (AArrow*)GetWorld()->SpawnActor<AActor>(Arrow_BP, Location, Rotation, SpawnArrow);
 
 	}
 
@@ -151,7 +150,7 @@ void UPlayerScript::Aimming()
 {
 	if (Aiming != NULL)
 	{
-		Aiming->AddToViewport(10);
+		Aiming->AddToViewport(1);
 		camera->FieldOfView = 50;
 		isAiming = true;	
 		if (animInstance != NULL)

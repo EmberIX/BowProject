@@ -41,12 +41,12 @@ public:
 	//UPROPERTY(EditDefaultsOnly)
 	//	TSubclassOf<AActor> ArrowToSpawn;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
 		UAnimMontage* ShootArrow;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
 		TSubclassOf<class AActor> Arrow_BP;
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
 		AArrow* Arrow;
 
 	UPROPERTY()
@@ -63,7 +63,6 @@ public:
 	void Mouse_LookUpDown(float axisValue);
 	void Aimming();
 	void ReleasedAimming();
-	
 	void Shoot();
 
 	void Updating_PlayerAnimationSpeed();
@@ -72,5 +71,9 @@ public:
 	bool OnRight = false;
 	bool isAiming = false;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
+		bool isShooting;
+		
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
 	int playerScore = 0;
 };

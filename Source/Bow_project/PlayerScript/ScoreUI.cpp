@@ -2,6 +2,7 @@
 
 
 #include "ScoreUI.h"
+#include "PlayerScript.h"
 
 // Sets default values for this component's properties
 UScoreUI::UScoreUI()

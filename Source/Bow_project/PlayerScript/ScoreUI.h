@@ -30,9 +30,14 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	TSubclassOf<class UUserWidget> playerWidget;
-	UHighScore* mainWidget;
-	UPlayerScript* playerSc;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
+		TSubclassOf<class UUserWidget> playerWidget;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
+		UHighScore* mainWidget;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "BlueprintEdit")
+		class UPlayerScript* playerSc;
 
 	UTextBlock* scoreText;
 };
